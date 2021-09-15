@@ -1,10 +1,11 @@
-import './App.css';
+import { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import './App.css';
 
+import { Provider } from './context';
 import Navbar from './components/layout/Navbar';
 import Index from './components/layout/Index';
-import { Provider } from './context';
-import { Component } from 'react';
+import Lyrics from './components/tracks/Lyrics';
 
 class App extends Component {
   render() {
@@ -16,6 +17,7 @@ class App extends Component {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={Index} />
+                <Route exact path="/lyrics/track/:id" component={Lyrics} />
               </Switch>
             </div>
           </>
