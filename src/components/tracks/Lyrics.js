@@ -35,7 +35,7 @@ class Lyrics extends Component {
   render() {
     const { track, lyrics } = this.state;
     if (track === undefined || lyrics === undefined || Object.keys(track).length === 0 || Object.keys(lyrics).length === 0) {
-      return <Spinner/>
+      return <Spinner />
     } else {
       return (
         <>
