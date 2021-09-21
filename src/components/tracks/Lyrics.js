@@ -5,7 +5,7 @@ import axios from 'axios';
 import Spinner from '../layout/Spinner';
 import Moment from 'react-moment';
 
-const Lyrics = props => {
+export const Lyrics = props => {
   const [state, setState] = useState({
     track: {},
     lyrics: ''
@@ -71,5 +71,3 @@ const Lyrics = props => {
     );
   }
 }
-
-export default Lyrics;

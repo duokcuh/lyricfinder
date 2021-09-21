@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import { Context } from '../../context';
+import { TrackList } from '../../context';
 import Spinner from '../layout/Spinner';
-import Track from './Track';
+import { Track } from './Track';
 
-const Tracks = () => {
-  const { state } = useContext(Context);
+export const Tracks = () => {
+  const { state } = useContext(TrackList);
   const { track_list, heading } = state;
   
   if (track_list.length === 0) {
@@ -22,5 +22,3 @@ const Tracks = () => {
     )
   }
 }
-
-export default Tracks;

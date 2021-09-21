@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import axios from 'axios';
 
-export const Context = React.createContext();
+export const TrackList = React.createContext();
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -44,8 +44,8 @@ export const Provider = props => {
   }, []);
   
   return (
-    <Context.Provider value={{ state, dispatch }}>
+    <TrackList.Provider value={{ state, dispatch }}>
       {props.children}
-    </Context.Provider>
+    </TrackList.Provider>
   );
 }
