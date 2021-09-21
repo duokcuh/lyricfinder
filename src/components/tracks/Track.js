@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Track = ({ track }) => {
+export const Track = ({ track }) => {
   
   return (
     <div className="col-md-6">
@@ -20,5 +20,3 @@ const Track = ({ track }) => {
     </div>
   );
 };
-
-export default Track;

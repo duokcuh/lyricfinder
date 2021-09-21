@@ -1,10 +1,10 @@
 import { useContext, useState } from 'react';
-import { Context } from '../../context';
+import { TrackList } from '../../context';
 import axios from 'axios';
 
-const Search = () => {
+export const Search = () => {
   const [trackTitle, setTrackTitle] = useState('');
-  const { dispatch } = useContext(Context);
+  const { dispatch } = useContext(TrackList);
   
   const findTrack = e => {
     e.preventDefault();
@@ -51,5 +51,3 @@ const Search = () => {
     </div>
   );
 }
-
-export default Search;

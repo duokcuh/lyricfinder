@@ -1,5 +1,4 @@
-import Tracks from '../tracks/Tracks';
-import Search from '../tracks/search';
+import { Tracks, Search } from '../tracks';
 
 const Index = () => {
   return (
