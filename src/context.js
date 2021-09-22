@@ -1,21 +1,23 @@
-import React, { useEffect, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 import axios from 'axios';
+import { getURL } from './getURL';
 
-export const TrackList = React.createContext();
+export const TrackList = createContext();
+export const TracksDispatch = createContext();
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'SEARCH_TRACKS':
-      return {
-        ...state,
-        track_list: action.payload,
-        heading: 'Search Results'
-      };
     case 'GET_TRACKS':
       return {
         ...state,
-        track_list: action.payload,
-        heading: 'Top 10 Tracks'
+        trackList: action.payload.trackList,
+        heading: action.payload.heading,
+        isLoading: false
+      };
+    case 'LOADING':
+      return {
+        ...state,
+        isLoading: true
       }
     default:
       return state;
@@ -23,29 +25,37 @@ const reducer = (state, action) => {
 }
 
 export const Provider = props => {
-  const [state, dispatch] = useReducer(reducer, {
-    track_list: [],
-    heading: ''
+  const [trackList, dispatch] = useReducer(reducer, {
+    trackList: [],
+    heading: 'Top 10 Tracks',
+    isLoading: true
   });
   
   useEffect(() => {
-    //api: https://developer.musixmatch.com/documentation
-    //set country=xw for worldwide
-    axios.get(
-      `https://cors-access-allow.herokuapp.com/https://api.musixmatch.com/ws/1.1/chart.tracks.get?chart_name=top&page=1&page_size=10&country=us&f_has_lyrics=1&apikey=${process.env.REACT_APP_API_KEY}`
-    )
-      .then(res => {
+    
+    const getTrackList = async () => {
+      try {
+        //set country=xw for worldwide
+        const result = await axios.get(getURL({ type: 'GET_TOP', payload: 'us' }));
         dispatch({
           type: 'GET_TRACKS',
-          payload: res.data.message.body.track_list
+          payload: {
+            trackList: result.data.message.body.track_list,
+            heading: 'Top 10 Tracks'
+          }
         });
-      })
-      .catch(err => console.log(err))
+      } catch (err) { console.log(err) }
+    };
+    
+    getTrackList();
+    
   }, []);
   
   return (
-    <TrackList.Provider value={{ state, dispatch }}>
-      {props.children}
+    <TrackList.Provider value={trackList}>
+      <TracksDispatch.Provider value={dispatch}>
+        {props.children}
+      </TracksDispatch.Provider>
     </TrackList.Provider>
   );
 }

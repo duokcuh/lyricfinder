@@ -4,17 +4,16 @@ import Spinner from '../layout/Spinner';
 import { Track } from './Track';
 
 export const Tracks = () => {
-  const { state } = useContext(TrackList);
-  const { track_list, heading } = state;
+  const { trackList, heading, isLoading } = useContext(TrackList);
   
-  if (track_list.length === 0) {
+  if (isLoading) {
     return <Spinner />
   } else {
     return (
       <>
         <h3 className="text-center mb-4">{heading}</h3>
         <div className="row">
-          {track_list.map(item => (
+          {trackList.map(item => (
             <Track key={item.track.track_id} track={item.track} />
           ))}
         </div>

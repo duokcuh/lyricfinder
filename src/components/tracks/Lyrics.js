@@ -4,39 +4,36 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Spinner from '../layout/Spinner';
 import Moment from 'react-moment';
+import { getURL } from '../../getURL';
 
 export const Lyrics = props => {
   const [state, setState] = useState({
     track: {},
-    lyrics: ''
+    lyrics: '',
+    isLoading: true
   });
   
   useEffect(() => {
-    let track;
-    //api: https://developer.musixmatch.com/documentation
-    //set country=xw for worldwide
-    axios.get(
-      `https://cors-access-allow.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.get?track_id=${props.match.params.id}
-&apikey=${process.env.REACT_APP_API_KEY}`
-    )
-      .then(res => {
-        track = res.data.message.body.track;
-        return axios.get(
-          `https://cors-access-allow.herokuapp.com/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${props.match.params.id}
-&apikey=${process.env.REACT_APP_API_KEY}`
-        );
-      })
-      .then(res => {
-        setState({
-          track,
-          lyrics: res.data.message.body.lyrics?.lyrics_body || 'Unfortunately the lyrics are not available'
-        });
-      })
-      .catch(err => console.log(err))
+    
+    const getTracks = async () => {
+      try {
+        let result = await axios.get(getURL({type: 'GET_TRACK', payload: props.match.params.id}));
+        let track = result.data.message.body.track;
+        let lyrics = 'Unfortunately the lyrics are not available';
+        if (track.has_lyrics) {
+          result = await axios.get(getURL({type: 'GET_LYRICS', payload: props.match.params.id}));
+          lyrics = result.data.message.body.lyrics.lyrics_body;
+        }
+        setState({ track, lyrics, isLoading: false });
+      } catch (err) { console.log(err) }
+    };
+    
+    getTracks();
+    
   }, [props]);
   
-  const { track, lyrics } = state;
-  if (track === undefined || lyrics === undefined || Object.keys(track).length === 0) {
+  const { track, lyrics, isLoading } = state;
+  if (isLoading) {
     return <Spinner />
   } else {
     return (
